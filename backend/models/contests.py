@@ -18,6 +18,7 @@ class Contest(Base):
     duration = Column(Integer, nullable=False)  # in minutes
     status = Column(String, nullable=False)  # upcoming, ongoing, past
     description = Column(Text, nullable=True)
+    solution_url = Column(String, nullable=True)  # YouTube solution URL
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     

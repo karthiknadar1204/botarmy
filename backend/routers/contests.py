@@ -9,6 +9,7 @@ from scrapers.codeforces import CodeForcesScraper
 from scrapers.codechef import CodeChefScraper
 from scrapers.leetcode import LeetCodeScraper
 from sqlalchemy import and_, or_, func
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/contests", tags=["contests"])
 
@@ -107,3 +108,24 @@ async def refresh_contests(db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to refresh contests: {str(e)}")
+
+class SolutionUpdate(BaseModel):
+    solution_url: str
+
+@router.put("/{contest_id}/solution")
+async def update_solution_url(
+    contest_id: str,
+    solution: SolutionUpdate,
+    db: Session = Depends(get_db)
+):
+    """
+    Update the YouTube solution URL for a contest
+    """
+    contest = db.query(Contest).filter(Contest.id == contest_id).first()
+    if not contest:
+        raise HTTPException(status_code=404, detail="Contest not found")
+    
+    contest.solution_url = solution.solution_url
+    db.commit()
+    db.refresh(contest)
+    return contest

@@ -1,7 +1,7 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
 import { useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -9,38 +9,32 @@ export default function UserSync() {
   const { isSignedIn, user } = useUser();
 
   useEffect(() => {
-    const syncUserWithBackend = async () => {
-      if (isSignedIn && user) {
-        try {
-          const userData = {
-            clerk_id: user.id,
-            email: user.primaryEmailAddress?.emailAddress || '',
-            username: user.username,
-            first_name: user.firstName,
-            last_name: user.lastName,
-            image_url: user.imageUrl,
-          };
+    const syncUser = async () => {
+      if (!isSignedIn || !user) return;
 
-          const response = await fetch(`${API_URL}/users/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          });
+      try {
+        const response = await fetch(`${API_URL}/users/sync`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: user.id,
+            email: user.primaryEmailAddress?.emailAddress,
+            name: user.fullName,
+          }),
+        });
 
-          if (!response.ok) {
-            console.error('Failed to sync user data with backend');
-          }
-        } catch (error) {
-          console.error('Error syncing user with backend:', error);
+        if (!response.ok) {
+          console.error('Failed to sync user');
         }
+      } catch (error) {
+        console.error('Error syncing user:', error);
       }
     };
 
-    syncUserWithBackend();
+    syncUser();
   }, [isSignedIn, user]);
-
 
   return null;
 } 

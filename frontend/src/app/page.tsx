@@ -89,7 +89,7 @@ export default function Home() {
         }
 
         const data = await response.json();
-        const bookmarkedIds = new Set(data.map((contest: Contest) => contest.id));
+        const bookmarkedIds = new Set<string>(data.map((contest: Contest) => contest.id));
         setBookmarkedContests(bookmarkedIds);
       } catch (err) {
         console.error('Error fetching bookmarked contests:', err);
@@ -130,7 +130,7 @@ export default function Home() {
         }
 
         const data = await response.json();
-        const reminderIds = new Set(data.map((reminder: any) => reminder.contest_id));
+        const reminderIds = new Set<string>(data.map((reminder: any) => reminder.contest_id));
         setReminderContests(reminderIds);
       } catch (err) {
         console.error('Error fetching reminders:', err);
@@ -250,10 +250,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen p-6 bg-white">
+    <main className="min-h-screen p-6 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Coding Contests</h1>
+          <h1 className="text-3xl font-bold text-foreground">Coding Contests</h1>
           <div className="flex gap-2">
             <Button
               variant="outline"

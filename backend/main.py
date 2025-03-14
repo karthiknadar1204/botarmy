@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from models.database import engine, Base, get_db
 from models.contests import Contest
 from models.bookmarks import Bookmark
-from routers import contests, bookmarks, users
+from routers import contests, bookmarks, users, reminders
 from scrapers.codeforces import CodeForcesScraper
 from scrapers.leetcode import LeetCodeScraper
 import os
@@ -44,6 +44,7 @@ app.add_middleware(
 app.include_router(contests.router)
 app.include_router(bookmarks.router)
 app.include_router(users.router)
+app.include_router(reminders.router)
 
 
 @contextmanager

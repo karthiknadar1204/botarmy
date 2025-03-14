@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import BookmarkButton from '@/components/BookmarkButton';
+import BookmarkButton from '@/_components/BookmarkButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 

@@ -9,7 +9,7 @@ import {
 } from '@clerk/nextjs'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import UserSync from '@/components/UserSync'
+import UserSync from '@/_components/UserSync'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

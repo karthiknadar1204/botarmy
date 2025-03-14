@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
 import BookmarkButton from '@/components/BookmarkButton';
+import ContestSection from '@/components/ContestSection';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -52,7 +53,6 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-
     const fetchBookmarkedContests = async () => {
       if (!isSignedIn || !user) return;
 
@@ -80,7 +80,6 @@ export default function Home() {
   }, [isSignedIn, user]);
 
   useEffect(() => {
-
     let result = [...contests];
     
     if (filter.platforms.length > 0) {
@@ -319,109 +318,19 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Codeforces Contests */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">Codeforces Contests</h2>
-          {getPlatformContests('codeforces').length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getPlatformContests('codeforces').map(contest => (
-                <div key={contest.id} className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200">
-                  <a 
-                    href={contest.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block p-5"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 pr-8">{contest.name}</h3>
-                      <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusColor(contest.status)}`}>
-                        {contest.status}
-                      </span>
-                    </div>
-                    
-                    <div className="mb-3 text-sm text-gray-600">
-                      <div className="flex items-center mb-1">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>Starts: {formatDate(contest.start_time)}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>Duration: {getDurationText(contest.duration)}</span>
-                      </div>
-                    </div>
-                    
-                    {contest.description && (
-                      <p className="text-sm text-gray-500 line-clamp-2">{contest.description || "No description available"}</p>
-                    )}
-                  </a>
-                  <BookmarkButton 
-                    contestId={contest.id} 
-                    isBookmarked={bookmarkedContests.has(contest.id)}
-                    onBookmarkChange={(isBookmarked) => handleBookmarkChange(contest.id, isBookmarked)}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center py-4">No Codeforces contests found with the current filters.</p>
-          )}
-        </section>
-        
-        {/* LeetCode Contests */}
-        <section className="mb-10">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800 border-b pb-2">LeetCode Contests</h2>
-          {getPlatformContests('leetcode').length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {getPlatformContests('leetcode').map(contest => (
-                <div key={contest.id} className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200">
-                  <a 
-                    href={contest.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block p-5"
-                  >
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 pr-8">{contest.name}</h3>
-                      <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusColor(contest.status)}`}>
-                        {contest.status}
-                      </span>
-                    </div>
-                    
-                    <div className="mb-3 text-sm text-gray-600">
-                      <div className="flex items-center mb-1">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>Starts: {formatDate(contest.start_time)}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>Duration: {getDurationText(contest.duration)}</span>
-                      </div>
-                    </div>
-                    
-                    {contest.description && (
-                      <p className="text-sm text-gray-500 line-clamp-2">{contest.description || "No description available"}</p>
-                    )}
-                  </a>
-                  <BookmarkButton 
-                    contestId={contest.id} 
-                    isBookmarked={bookmarkedContests.has(contest.id)}
-                    onBookmarkChange={(isBookmarked) => handleBookmarkChange(contest.id, isBookmarked)}
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500 text-center py-4">No LeetCode contests found with the current filters.</p>
-          )}
-        </section>
+        {/* Contest Sections */}
+        {getAllPlatforms().map(platform => (
+          <ContestSection
+            key={platform}
+            platform={platform}
+            contests={getPlatformContests(platform)}
+            formatDate={formatDate}
+            getDurationText={getDurationText}
+            getStatusColor={getStatusColor}
+            bookmarkedContests={bookmarkedContests}
+            onBookmarkChange={handleBookmarkChange}
+          />
+        ))}
       </div>
     </main>
   );

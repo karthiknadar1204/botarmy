@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import BookmarkButton from '@/_components/BookmarkButton';
-// Temporarily removing ReminderButton import
-// import ReminderButton from '@/_components/ReminderButton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 

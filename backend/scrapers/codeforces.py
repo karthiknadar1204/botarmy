@@ -24,24 +24,24 @@ class CodeForcesScraper:
         if params is None:
             params = {}
             
-        # Add API key and current time
+
         params["apiKey"] = self.api_key
         params["time"] = str(int(time.time()))
         
-        # Generate random string for apiSig
+
         rand = random.randint(100000, 999999)
         
-        # Create signature string
+
         param_strings = []
         for key in sorted(params.keys()):
             param_strings.append(f"{key}={params[key]}")
         
         signature_string = f"{rand}/{method_name}?{'&'.join(param_strings)}#{self.api_secret}"
         
-        # Calculate hash
+
         hash_value = hashlib.sha512(signature_string.encode()).hexdigest()
         
-        # Add apiSig to params
+
         params["apiSig"] = f"{rand}{hash_value}"
         
         return params
@@ -66,10 +66,10 @@ class CodeForcesScraper:
                 
             contests = []
             current_time = datetime.now().timestamp()
-            one_week_ago = current_time - (7 * 24 * 60 * 60)  # 7 days in seconds
+            one_week_ago = current_time - (7 * 24 * 60 * 60)  
             
             for contest in data["result"]:
-                # Skip gym contests
+
                 if contest.get("phase") == "FINISHED" and contest.get("gym", False):
                     continue
                 
@@ -96,7 +96,7 @@ class CodeForcesScraper:
                     "url": f"https://codeforces.com/contest/{contest['id']}",
                     "start_time": start_time,
                     "end_time": end_time,
-                    "duration": duration_seconds // 60,  # Convert to minutes
+                    "duration": duration_seconds // 60,  
                     "status": status,
                     "description": contest.get("description", "")
                 })

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@clerk/nextjs';
+import BookmarkButton from '@/components/BookmarkButton';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -24,9 +25,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState({
-    platform: 'all',
+    platforms: [] as string[],
     status: 'all',
   });
+  const [bookmarkedContests, setBookmarkedContests] = useState<Set<string>>(new Set());
   const { isSignedIn, user } = useUser();
 
   useEffect(() => {
@@ -50,11 +52,39 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Apply filters
+
+    const fetchBookmarkedContests = async () => {
+      if (!isSignedIn || !user) return;
+
+      try {
+        const response = await fetch(`${API_URL}/bookmarks`, {
+          headers: {
+            'user-id': user.id,
+          },
+        });
+
+        if (!response.ok) {
+          console.error('Failed to fetch bookmarked contests');
+          return;
+        }
+
+        const data = await response.json();
+        const bookmarkedIds = new Set(data.map((contest: Contest) => contest.id));
+        setBookmarkedContests(bookmarkedIds);
+      } catch (err) {
+        console.error('Error fetching bookmarked contests:', err);
+      }
+    };
+
+    fetchBookmarkedContests();
+  }, [isSignedIn, user]);
+
+  useEffect(() => {
+
     let result = [...contests];
     
-    if (filter.platform !== 'all') {
-      result = result.filter(contest => contest.platform === filter.platform);
+    if (filter.platforms.length > 0) {
+      result = result.filter(contest => filter.platforms.includes(contest.platform));
     }
     
     if (filter.status !== 'all') {
@@ -64,11 +94,34 @@ export default function Home() {
     setFilteredContests(result);
   }, [filter, contests]);
 
-  const handleFilterChange = (type: 'platform' | 'status', value: string) => {
-    setFilter(prev => ({
-      ...prev,
-      [type]: value
-    }));
+  const handleFilterChange = (type: 'platforms' | 'status', value: any) => {
+    if (type === 'platforms') {
+      if (Array.isArray(value)) {
+        setFilter(prev => ({
+          ...prev,
+          platforms: value
+        }));
+      } else {
+        setFilter(prev => {
+          const platforms = [...prev.platforms];
+          const index = platforms.indexOf(value);
+          if (index === -1) {
+            platforms.push(value);
+          } else {
+            platforms.splice(index, 1);
+          }
+          return {
+            ...prev,
+            platforms
+          };
+        });
+      }
+    } else {
+      setFilter(prev => ({
+        ...prev,
+        [type]: value
+      }));
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -103,7 +156,32 @@ export default function Home() {
   };
 
   const getPlatformContests = (platform: string) => {
+    if (filter.platforms.length > 0 && !filter.platforms.includes(platform)) {
+      return [];
+    }
     return filteredContests.filter(contest => contest.platform === platform);
+  };
+
+  const isPlatformSelected = (platform: string) => {
+    return filter.platforms.includes(platform);
+  };
+
+  const getAllPlatforms = () => {
+    const platforms = new Set<string>();
+    contests.forEach(contest => platforms.add(contest.platform));
+    return Array.from(platforms);
+  };
+
+  const handleBookmarkChange = (contestId: string, isBookmarked: boolean) => {
+    setBookmarkedContests(prev => {
+      const newSet = new Set(prev);
+      if (isBookmarked) {
+        newSet.add(contestId);
+      } else {
+        newSet.delete(contestId);
+      }
+      return newSet;
+    });
   };
 
   if (loading) {
@@ -128,25 +206,54 @@ export default function Home() {
   return (
     <main className="min-h-screen p-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Coding Contests</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold text-gray-800">Coding Contests</h1>
+          {isSignedIn && (
+            <Link 
+              href="/bookmarks" 
+              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-5 w-5 mr-2" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" 
+                />
+              </svg>
+              My Bookmarks
+            </Link>
+          )}
+        </div>
         
         {/* Filter Section */}
         <div className="mb-8 p-6 bg-gray-50 rounded-lg shadow-sm">
           <div className="flex flex-wrap gap-6 justify-between items-end">
             <div className="flex flex-wrap gap-4">
               <div>
-                <label htmlFor="platform-filter" className="block text-sm font-medium text-gray-700 mb-2">Platform</label>
-                <select
-                  id="platform-filter"
-                  className="rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
-                  value={filter.platform}
-                  onChange={(e) => handleFilterChange('platform', e.target.value)}
-                >
-                  <option value="all">All Platforms</option>
-                  <option value="codeforces">Codeforces</option>
-                  <option value="leetcode">LeetCode</option>
-                  <option value="codechef">CodeChef</option>
-                </select>
+                <h3 className="block text-sm font-medium text-gray-700 mb-2">Platforms</h3>
+                <div className="flex flex-wrap gap-2">
+                  {getAllPlatforms().map(platform => (
+                    <div key={platform} className="flex items-center">
+                      <input
+                        id={`platform-${platform}`}
+                        type="checkbox"
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        checked={isPlatformSelected(platform)}
+                        onChange={() => handleFilterChange('platforms', platform)}
+                      />
+                      <label htmlFor={`platform-${platform}`} className="ml-2 text-sm text-gray-700 capitalize">
+                        {platform}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
               
               <div>
@@ -167,14 +274,29 @@ export default function Home() {
             
             {/* Active Filters Display and Clear Button */}
             <div className="flex items-center">
-              {(filter.platform !== 'all' || filter.status !== 'all') && (
+              {(filter.platforms.length > 0 || filter.status !== 'all') && (
                 <div className="flex items-center gap-2">
                   <div className="text-sm text-gray-600">
                     Active filters:
-                    {filter.platform !== 'all' && (
-                      <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {filter.platform.charAt(0).toUpperCase() + filter.platform.slice(1)}
-                      </span>
+                    {filter.platforms.length > 0 && (
+                      <div className="inline-flex flex-wrap gap-1 ml-2">
+                        {filter.platforms.map(platform => (
+                          <span 
+                            key={platform}
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                          >
+                            <span className="capitalize">{platform}</span>
+                            <button 
+                              onClick={() => handleFilterChange('platforms', platform)}
+                              className="ml-1 text-blue-500 hover:text-blue-700"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                              </svg>
+                            </button>
+                          </span>
+                        ))}
+                      </div>
                     )}
                     {filter.status !== 'all' && (
                       <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -183,7 +305,7 @@ export default function Home() {
                     )}
                   </div>
                   <button
-                    onClick={() => setFilter({ platform: 'all', status: 'all' })}
+                    onClick={() => setFilter({ platforms: [], status: 'all' })}
                     className="ml-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,16 +325,15 @@ export default function Home() {
           {getPlatformContests('codeforces').length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getPlatformContests('codeforces').map(contest => (
-                <a 
-                  key={contest.id} 
-                  href={contest.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 hover:bg-gray-50"
-                >
-                  <div className="p-5">
+                <div key={contest.id} className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200">
+                  <a 
+                    href={contest.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block p-5"
+                  >
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{contest.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 pr-8">{contest.name}</h3>
                       <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusColor(contest.status)}`}>
                         {contest.status}
                       </span>
@@ -236,8 +357,13 @@ export default function Home() {
                     {contest.description && (
                       <p className="text-sm text-gray-500 line-clamp-2">{contest.description || "No description available"}</p>
                     )}
-                  </div>
-                </a>
+                  </a>
+                  <BookmarkButton 
+                    contestId={contest.id} 
+                    isBookmarked={bookmarkedContests.has(contest.id)}
+                    onBookmarkChange={(isBookmarked) => handleBookmarkChange(contest.id, isBookmarked)}
+                  />
+                </div>
               ))}
             </div>
           ) : (
@@ -251,16 +377,15 @@ export default function Home() {
           {getPlatformContests('leetcode').length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {getPlatformContests('leetcode').map(contest => (
-                <a 
-                  key={contest.id} 
-                  href={contest.url} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 hover:bg-gray-50"
-                >
-                  <div className="p-5">
+                <div key={contest.id} className="relative rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200">
+                  <a 
+                    href={contest.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block p-5"
+                  >
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{contest.name}</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 pr-8">{contest.name}</h3>
                       <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${getStatusColor(contest.status)}`}>
                         {contest.status}
                       </span>
@@ -284,8 +409,13 @@ export default function Home() {
                     {contest.description && (
                       <p className="text-sm text-gray-500 line-clamp-2">{contest.description || "No description available"}</p>
                     )}
-                  </div>
-                </a>
+                  </a>
+                  <BookmarkButton 
+                    contestId={contest.id} 
+                    isBookmarked={bookmarkedContests.has(contest.id)}
+                    onBookmarkChange={(isBookmarked) => handleBookmarkChange(contest.id, isBookmarked)}
+                  />
+                </div>
               ))}
             </div>
           ) : (

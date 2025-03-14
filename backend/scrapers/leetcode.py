@@ -41,11 +41,11 @@ class LeetCodeScraper:
         try:
             logger.info("Scraping LeetCode contest page")
             
-            # If we can't scrape the page, return some hardcoded upcoming contests
-            # This is a fallback solution when scraping is blocked
+
+
             return self._get_fallback_contests()
             
-            # The code below is kept for reference but currently not used due to 403 errors
+            # The code below is is for reference from a amigo.
             """
             response = requests.get(self.contest_url, headers=self.headers)
             
@@ -141,17 +141,16 @@ class LeetCodeScraper:
         now = datetime.now()
         contests = []
         
-        # Generate multiple upcoming weekly contests (next 8 weeks)
+
         for week in range(8):
-            # Calculate the next Saturday
             days_until_saturday = (5 - now.weekday()) % 7
-            if days_until_saturday == 0 and now.hour >= 10:  # If today is Saturday and contest already started
-                days_until_saturday = 7  # Next Saturday
+            if days_until_saturday == 0 and now.hour >= 10:  
+                days_until_saturday = 7  
                 
             next_saturday = now + timedelta(days=days_until_saturday + (week * 7))
             next_saturday = next_saturday.replace(hour=10, minute=30, second=0, microsecond=0)
             
-            # Weekly contest number (approximate)
+
             weekly_number = 439 + week
             
             weekly_contest = {
@@ -166,7 +165,7 @@ class LeetCodeScraper:
                 "description": "LeetCode Weekly Contest"
             }
             
-            # Update status based on current time
+
             if next_saturday <= now < next_saturday + timedelta(minutes=90):
                 weekly_contest["status"] = "ongoing"
             elif next_saturday < now:
@@ -174,7 +173,7 @@ class LeetCodeScraper:
             
             contests.append(weekly_contest)
             
-            # Add biweekly contest for even weeks (every other Sunday)
+
             if (now.isocalendar()[1] + week) % 2 == 0:
                 biweekly_number = 123 + (week // 2)
                 next_sunday = next_saturday + timedelta(days=1)
@@ -201,7 +200,7 @@ class LeetCodeScraper:
                 contests.append(biweekly_contest)
         
         # Add past contests (only from the last week)
-        for week in range(1, 2):  # Just 1 week back
+        for week in range(1, 2):  
             past_saturday = now - timedelta(days=(now.weekday() + 2) + (week * 7))
             past_saturday = past_saturday.replace(hour=10, minute=30, second=0, microsecond=0)
             

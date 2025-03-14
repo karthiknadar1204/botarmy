@@ -10,21 +10,21 @@ from sqlalchemy import and_
 router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
 
 @router.get("/")
-async def get_bookmarks(
+async def get_user_bookmarks(
     db: Session = Depends(get_db),
     user_id: str = Header(..., description="Clerk user ID")
 ):
     """
     Get all bookmarked contests for a user
     """
-    # Join Bookmark and Contest to get full contest details
-    bookmarks = db.query(Contest).join(
+    # Query bookmarks for the user and join with contests
+    bookmarked_contests = db.query(Contest).join(
         Bookmark, Contest.id == Bookmark.contest_id
     ).filter(
         Bookmark.user_id == user_id
     ).all()
     
-    return bookmarks
+    return bookmarked_contests
 
 @router.post("/{contest_id}")
 async def bookmark_contest(

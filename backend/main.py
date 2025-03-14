@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from models.database import engine, Base, get_db
 from models.contests import Contest
 from models.bookmarks import Bookmark
-from routers import contests, bookmarks
+from routers import contests, bookmarks, users
 from scrapers.codeforces import CodeForcesScraper
 from scrapers.leetcode import LeetCodeScraper
 import os
@@ -38,6 +38,7 @@ app.add_middleware(
 # Include routers
 app.include_router(contests.router)
 app.include_router(bookmarks.router)
+app.include_router(users.router)
 
 @app.get("/scrape-codeforces")
 async def scrape_codeforces(db: Session = Depends(get_db)):

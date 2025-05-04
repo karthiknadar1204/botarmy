@@ -3,7 +3,7 @@ Cron Job example
 
 # Coding Contest Tracker
 
-A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.
+A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.,will also add one support for codechef
 
 ## Project Overview
 

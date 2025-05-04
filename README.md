@@ -1,7 +1,7 @@
 Cron Job example 
 # botarmy<img width="1058" alt="Screenshot 2025-03-15 at 2 50 01 AM" src="https://github.com/user-attachments/assets/272b03a8-dbe4-4b73-9372-0e87cb88a86c" />
 
-# Coding Contest Tracker
+# Coding Contest Tracker->waste
 
 A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.,will also add one support for codechef
 

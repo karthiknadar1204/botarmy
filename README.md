@@ -2,11 +2,11 @@ Cron Job example
 # botarmy<img width="1058" alt="Screenshot 2025-03-15 at 2 50 01 AM" src="https://github.com/user-attachments/assets/272b03a8-dbe4-4b73-9372-0e87cb88a86c" />
 
 # Coding Contest Tracker
-sweety patootie
+
 A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.
 
 ## Project Overview
-dekh le bsdk-->oh dil bole hadippa  
+
 This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts:
 
 - **Backend**: A FastAPI application that scrapes contest data from platforms like Codeforces and LeetCode.

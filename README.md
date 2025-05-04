@@ -6,7 +6,7 @@ sweety patootie
 A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.
 
 ## Project Overview
-haan dekh le bsdk
+dekh le bsdk-->oh dil bole hadippa  
 This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts:
 
 - **Backend**: A FastAPI application that scrapes contest data from platforms like Codeforces and LeetCode.

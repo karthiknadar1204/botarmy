@@ -7,7 +7,7 @@ waste of time tha yeh project-->god help this --->i dont know who priyanshu is,w
 A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.
 
 ## Project Overview
-
+haan dekh le bsdk
 This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts:
 
 - **Backend**: A FastAPI application that scrapes contest data from platforms like Codeforces and LeetCode.

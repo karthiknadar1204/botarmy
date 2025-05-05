@@ -1,7 +1,7 @@
 Cron Job example 
 # botarmy<img width="1058" alt="Screenshot 2025-03-15 at 2 50 01 AM" src="https://github.com/user-attachments/assets/272b03a8-dbe4-4b73-9372-0e87cb88a86c" />
 
-# Coding Contest Tracker->waste
+# Coding Contest Tracker->waste,do developement instead of this waste of time for god sake mane
 
 A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.,will also add one support for codechef
 
@@ -137,8 +137,8 @@ This application helps competitive programmers stay updated with upcoming contes
 - Create personalized contest recommendations.
 - Implement social features (sharing, comments).
 
-## Environment Variables
-
+## Environment Variables-->whoa big word
+huh huh huh
 Here are the essential environment variables you'll need:
 
 Frontend

@@ -7,7 +7,7 @@ A full-stack application to track, bookmark, and get reminders for competitive p
 
 ## Project Overview
 
-This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts:
+This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts AND MORE PARTS WILL BE ADDED LIKE codechef support:
 
 - **Backend**: A FastAPI application that scrapes contest data from platforms like Codeforces and LeetCode.
 - **Frontend**: A Next.js application with Clerk authentication and a modern UI built using Shadcn/UI components.

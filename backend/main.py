@@ -2,13 +2,10 @@
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from models.database import engine, Base, get_db
+db
 from models.contests import Contest
 from models.bookmarks import Bookmark
 from routers import contests, bookmarks, users
-from scrapers.codeforces import CodeForcesScraper
-from scrapers.leetcode import LeetCodeScraper
-import os
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
@@ -16,7 +13,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from contextlib import contextmanager
 
-
+rush hour 3 is too funny
 
 app = FastAPI(
     title="Coding Contests API",

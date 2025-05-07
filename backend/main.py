@@ -4,14 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from models.bookmarks import Bookmark
 from routers import contests, bookmarks, users
-from scrapers.codeforces import CodeForcesScraper
+
 from scrapers.leetcode import LeetCodeScraper
-import os
-import logging
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.cron import CronTrigger
 from contextlib import contextmanager
 from datetime import datetime
 

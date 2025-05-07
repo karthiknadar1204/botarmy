@@ -207,9 +207,6 @@ async def scrape_leetcode(db: Session = Depends(get_db)):
 async def root():
     return {
         "message": "Coding Contests API",
-        "endpoints": {
-            "/contests": "Get all contests with optional filters",
-            "/contests/refresh": "Refresh contests data from all platforms",
             "/bookmarks": "Manage bookmarked contests",
             "/scrape-codeforces": "Directly scrape Codeforces contests",
             "/scrape-leetcode": "Directly scrape LeetCode contests"

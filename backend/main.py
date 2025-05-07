@@ -1,7 +1,7 @@
 # main.py
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+
 from models.bookmarks import Bookmark
 from routers import contests, bookmarks, users
 
@@ -29,11 +29,11 @@ from datetime import datetime
 
 app.include_router(contests.router)
 app.include_router(bookmarks.router)
-app.include_router(users.router)
+
 
 
 @contextmanager
-def get_db_context():
+
     db = SessionLocal()
     try:
         yield db
@@ -49,7 +49,7 @@ def scrape_all_contests():
         with get_db_context() as db:
 
             codeforces_scraper = CodeForcesScraper()
-            codeforces_contests = codeforces_scraper.get_contests()
+
             
 
             leetcode_scraper = LeetCodeScraper()

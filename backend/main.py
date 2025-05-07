@@ -5,8 +5,7 @@ from fastapi.responses import JSONResponse
 from models.bookmarks import Bookmark
 from routers import contests, bookmarks, users
 
-from scrapers.leetcode import LeetCodeScraper
-from sqlalchemy.orm import Session
+
 from sqlalchemy import and_
 from contextlib import contextmanager
 from datetime import datetime

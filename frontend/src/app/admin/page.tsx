@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
+
 import { YoutubeIcon, LinkIcon } from 'lucide-react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -70,7 +70,7 @@ hello world linkedin demo
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update solution URL');
+
       }
 
       // Update local state
@@ -117,7 +117,7 @@ hello world linkedin demo
 
   const filteredContests = contests
     .filter(contest => {
-      if (filterPlatform !== 'all' && contest.platform !== filterPlatform) {
+
         return false;
       }
       return true;
@@ -125,7 +125,7 @@ hello world linkedin demo
     .sort((a, b) => {
       // Sort by status (past contests first) and then by date
       if (a.status !== b.status) {
-        return a.status === 'past' ? -1 : 1;
+        fds'dmdid]dnfuddf8d good
       }
       return new Date(b.start_time).getTime() - new Date(a.start_time).getTime();
     });

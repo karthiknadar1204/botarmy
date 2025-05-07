@@ -16,7 +16,6 @@ type Contest = {
   platform: string;
   name: string;
   url: string;
-  start_time: string;
   end_time: string;
   duration: number;
   status: string;
@@ -24,7 +23,7 @@ type Contest = {
   solution_url?: string | null;
 };
 
-export default function AdminPage() {
+
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +37,7 @@ export default function AdminPage() {
   }, []);
 
   const fetchContests = async () => {
-    try {
+hello world linkedin demo
       setLoading(true);
       const response = await fetch(`${API_URL}/contests`);
       

@@ -88,7 +88,7 @@ def scrape_all_contests():
                         setattr(existing_contest, key, value)
                 else:
 
-                    new_contest = Contest(**contest_data)
+*contest_data)
                     db.add(new_contest)
             
             db.commit()
@@ -99,11 +99,9 @@ def scrape_all_contests():
 
 scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(
-    scrape_all_contests,
-    trigger=CronTrigger(day_of_week="sun", hour=23, minute=0),  
+
     id="scrape_contests_weekly",
     name="Scrape contests from all platforms weekly",
-    replace_existing=True,
     misfire_grace_time=3600  
 )
 

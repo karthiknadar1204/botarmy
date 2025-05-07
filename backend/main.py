@@ -16,18 +16,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from contextlib import contextmanager
 from datetime import datetime
-from models.database import SessionLocal
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
-Base.metadata.create_all(bind=engine)
 
-app = FastAPI(
-    title="Coding Contests API",
-    description="API for tracking coding contests from CodeForces, CodeChef, and LeetCode",
+
+
+
     version="1.0.0"
 )
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import BookmarkButton from '@/_components/BookmarkButton';
+
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -19,7 +19,7 @@ type Contest = {
   description: string;
 };
 
-export default function BookmarksPage() {
+
   const [bookmarkedContests, setBookmarkedContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

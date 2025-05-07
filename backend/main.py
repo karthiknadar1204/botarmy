@@ -2,8 +2,6 @@
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from models.database import engine, Base, get_db
-from models.contests import Contest
 from models.bookmarks import Bookmark
 from routers import contests, bookmarks, users
 from scrapers.codeforces import CodeForcesScraper
@@ -28,10 +26,7 @@ from datetime import datetime
 )
 
 
-app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

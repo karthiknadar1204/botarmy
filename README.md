@@ -1,13 +1,13 @@
 
 # botarmy<img width="1058" alt="Screenshot 2025-03-15 at 2 50 01 AM" src="https://github.com/user-attachments/assets/272b03a8-dbe4-4b73-9372-0e87cb88a86c" />
- wau wau-->ae bhandup
-# Coding Contest Tracker->this is a hiring project by a cp failure from google
 
-A full-stack application to track, bookmark, and get reminders for competitive programming contests across multiple platforms like Codeforces and LeetCode.,will also add one support for codechef
+
+
+
 
 ## Project Overview
 
-This application helps competitive programmers stay updated with upcoming contests, bookmark their favorites, and set reminders. The project consists of two main parts AND MORE PARTS WILL BE ADDED LIKE codechef support:
+
 
 - **Backend**: A FastAPI application that scrapes contest data from platforms like Codeforces and LeetCode.
 - **Frontend**: A Next.js application with Clerk authentication and a modern UI built using Shadcn/UI components.

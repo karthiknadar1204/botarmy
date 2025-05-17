@@ -1,8 +1,8 @@
 # models/bookmarks.py
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from .database import Base
-from datetime import datetime
+
+datetime
 import uuid
 
 class Bookmark(Base):
